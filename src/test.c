@@ -17,3 +17,11 @@ void fn_test_underline_mode_2 (FILE * fp){
     };
     fwrite(data, sizeof(uint8_t), sizeof(data), fp);
 }
+void fn_test_justification(FILE *file){
+	uint8_t test_data[] = {
+	0x1B, 0x61, 0x00, 'l','e','f','t', 0x1B, 0x61, 0x01, 'c',
+	'e','n','t','e','r', 0x1B, 0x61, 0x02, 'r','i','g','h','t'
+	};
+	fwrite(test_data, sizeof(uint8_t), sizeof(test_data), file);
+	return;
+}

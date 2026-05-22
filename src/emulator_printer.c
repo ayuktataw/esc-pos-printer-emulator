@@ -66,6 +66,9 @@ void fn_emulator_printer_select_command_handler(PrinterState * printer, EscPosPa
             case 0x2D:
                 fn_emulator_printer_handle_command_1B_2D(printer, parser, log_file);
 				break;
+			case 0x61:
+				fn_emulator_printer_handle_command_1B_61(printer, parser, log_file);
+				break;
             default:
                 fprintf(log_file, "Unknown ESC command: %02X\n", parser->command);
                 break;
@@ -201,4 +204,29 @@ void fn_emulator_printer_handle_command_1B_2D(PrinterState * printer, EscPosPars
             fn_emulator_printer_write_string_to_buffer("<span style=\" text-decoration: underline; text-decoration-thickness: 3px;\">", printer);
         }
     }
+}
+
+void fn_emulator_printer_handle_command_1B_61(PrinterState * printer, EscPosParser * parser, FILE *log_file)
+{
+	fn_emulator_logger_log_command_execution(parser, log_file);
+	if(parser->params[0] == 0){
+        printf("buffer size : %ld", sizeof(printer->print_buffer->data));
+		fn_emulator_printer_write_string_to_buffer("</span>", printer);
+        return ;
+	}
+	else if(parser->params[0] == 1 ){
+		if(printer->justification == 2)
+		{
+			fn_emulator_printer_write_string_to_buffer("</span>", printer);
+		}
+		fn_emulator_printer_write_string_to_buffer("<span style=\" display: block; text-align: center;\">", printer);
+        printer->justification = 1;
+	}else {
+		if(printer->justification == 1)
+        {
+            fn_emulator_printer_write_string_to_buffer("</span>", printer);
+        }
+        fn_emulator_printer_write_string_to_buffer("<span style=\"display: block; text-align: right;\">", printer);
+        printer->justification = 2;
+	}
 }

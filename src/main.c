@@ -39,7 +39,7 @@ int main(int argc, char ** argv){
 		PrintBuffer print_buffer_object = {
 			.size = 4096*1024,
 			.current_pointer_position = 0,
-			.data = (char *)malloc(4096*1024)
+			.data = (char *)malloc(1024*1024)
 		};
 		//Instatiating parser and printer state objects with default values
 		EscPosParser parser_object  = {
@@ -61,12 +61,13 @@ int main(int argc, char ** argv){
 			.double_width = false,
 			.double_height = false,
 			.print_buffer = &print_buffer_object,
+			.justification = 0,
 			.font_config = {
 				.currentFontIsA = true
 			}
 		};
 		//writing the initial HTML tags to the print buffer and moving the buffer pointer to the end of the string
-		fn_emulator_printer_write_string_to_buffer("<html><body>", &printer_state);
+		fn_emulator_printer_write_string_to_buffer("<html><body style=\"\">", &printer_state);
 		//creating a pointer to the parser and printer state objects to pass to the feeder function
 		EscPosParser * parser= &parser_object; 
 		PrinterState * printer_st = &printer_state;
@@ -143,7 +144,8 @@ void fn_emulator_cleanup(FILE * logfile, int mas_fd, int slave_fd){
 }
 
 void fn_test_run(FILE * fp){
-	fn_test_underline_mode_2(fp);
+	// fn_test_underline_mode_2(fp);
+	fn_test_justification(fp);
 	return;
 }
 void fn_emulator_set_date_string(char * datestring)
@@ -153,5 +155,5 @@ void fn_emulator_set_date_string(char * datestring)
 	time(&now);
 	local = localtime(&now);
 
-	strftime(datestring, sizeof(datestring), "%Y-%m-%d", local);
+	strftime(datestring, sizeof(datestring), "%Y-%m-%t", local);
 }

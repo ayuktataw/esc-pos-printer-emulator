@@ -76,6 +76,7 @@ typedef struct
 	bool double_height;
 	bool underline;
 	Font font_config;
+	uint8_t justification;
 	PrintBuffer * print_buffer;
 }PrinterState;
 
