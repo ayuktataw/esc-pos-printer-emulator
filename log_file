@@ -4,17 +4,116 @@
 Emulator started at: 2026-05
 NORMAL	->	ESC
 ESC	->	READING_PARAMS
-Executing command:	ESC	-	1	
+Executing command:	ESC	a	0	
+
+
+
+Emulator started at: 2026-05
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	0	
 READING_PARAMS	->	NORMAL
 NORMAL	->	ESC
 ESC	->	READING_PARAMS
-Executing command:	ESC	-	0	
+Executing command:	ESC	a	1	
 READING_PARAMS	->	NORMAL
 NORMAL	->	ESC
 ESC	->	READING_PARAMS
-Executing command:	ESC	-	2	
+Executing command:	ESC	a	2	
+READING_PARAMS	->	NORMAL
+
+
+
+Emulator started at: 2026-05
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	0	
 READING_PARAMS	->	NORMAL
 NORMAL	->	ESC
 ESC	->	READING_PARAMS
-Executing command:	ESC	-	0	
+Executing command:	ESC	a	1	
+READING_PARAMS	->	NORMAL
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	2	
+READING_PARAMS	->	NORMAL
+
+
+
+Emulator started at: 2026-05
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	0	
+READING_PARAMS	->	NORMAL
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	1	
+READING_PARAMS	->	NORMAL
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	2	
+READING_PARAMS	->	NORMAL
+
+
+
+Emulator started at: 2026-05
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	0	
+READING_PARAMS	->	NORMAL
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	1	
+READING_PARAMS	->	NORMAL
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	2	
+READING_PARAMS	->	NORMAL
+
+
+
+Emulator started at: 2026-05
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	0	
+READING_PARAMS	->	NORMAL
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	1	
+READING_PARAMS	->	NORMAL
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	2	
+READING_PARAMS	->	NORMAL
+
+
+
+Emulator started at: 2026-05
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	0	
+READING_PARAMS	->	NORMAL
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	1	
+READING_PARAMS	->	NORMAL
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	2	
+READING_PARAMS	->	NORMAL
+
+
+
+Emulator started at: 2026-05
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	0	
+READING_PARAMS	->	NORMAL
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	1	
+READING_PARAMS	->	NORMAL
+NORMAL	->	ESC
+ESC	->	READING_PARAMS
+Executing command:	ESC	a	2	
 READING_PARAMS	->	NORMAL

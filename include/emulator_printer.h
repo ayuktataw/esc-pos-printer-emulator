@@ -15,5 +15,6 @@ void fn_emulator_printer_handle_command_1B_26(PrinterState * , EscPosParser * , 
 void fn_emulator_printer_handle_command_1B_21(PrinterState * , EscPosParser * , FILE * );
 void fn_emulator_printer_handle_command_1B_2D(PrinterState * printer, EscPosParser * parser, FILE * log_file);
 void fn_emulator_printer_print_html(char * );
+void fn_emulator_printer_handle_command_1B_61(PrinterState * printer, EscPosParser * parser, FILE *log_file);
 
 #endif
