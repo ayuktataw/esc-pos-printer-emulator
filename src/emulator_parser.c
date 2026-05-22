@@ -71,19 +71,19 @@ void fn_emulator_parser_feeder(EscPosParser *parser, uint8_t * data, size_t len,
 				switch (data[i])
 				{
 				case 0x09: // horizontal tab
-					fn_emulator_printer_write_string_to_buffer(parser, "    ");
+					fn_emulator_printer_write_string_to_buffer( "    ", state);
 					break;
 				case 0x0A: // line feed
-					fn_emulator_printer_write_string_to_buffer(parser, "<br>");
+					fn_emulator_printer_write_string_to_buffer("<br>", state);
 					break;
 				case 0x0D: // carriage return
-					fn_emulator_printer_write_string_to_buffer(parser, "<br>");
+					fn_emulator_printer_write_string_to_buffer("<br>", state);
 					break;
 				case 0x0C: // print
-					fn_emulator_printer_write_string_to_buffer(parser, "</body></html>");
+					fn_emulator_printer_write_string_to_buffer("</body></html>", state);
 					break;
 				case 0x18: // cancel print
-					fn_emulator_logger_log_message(file, "Print cancelled by command 0x18");
+					// fn_emulator_logger_log_message("Print cancelled by command 0x18", file);
 					break;
 
 				default:
@@ -132,7 +132,6 @@ void fn_emulator_parser_process_bytes(EscPosParser * parser , uint8_t byte, FILE
 				 emulator_logger_log_parser_state_transition( parser, log_file, STATE_NORMAL);
 			}	
 			else{
-				fn_emulator_printer_print_byte(byte, log_file, state, parser);
 			}
 			break;
 		case STATE_ESC:
@@ -279,10 +278,18 @@ void fn_emulator_parser_process_command(EscPosParser * parser,  FILE * logfile, 
 void fn_emulator_parser_process_params(EscPosParser * parser, EscPosCommand cmd, FILE * logfile, uint8_t byte, PrinterState * state)
 {
 	//if we are here it means the command was already set and we are in the process of reading parameters or payload, so we need to check if we are still reading parameters or if we have finished reading parameters and need to check for payload
-
 		if(parser->state == STATE_READING_PARAMS && parser->params_received < parser->params_expected){
 			parser->params[parser->params_received] = byte;
 			parser->params_received++;
+			if(parser->params_received == parser->params_expected && !cmd.has_payload)
+				{
+					//if we have finished reading parameters and there is no payload, we can execute the command immediately in the main loop and change state back to normal
+					fn_emulator_printer_select_command_handler(state, parser, logfile);
+					ParserState previous_state = parser->state;
+					fn_emulator_parser_reset(parser);
+					parser->state = STATE_NORMAL;
+					emulator_logger_log_parser_state_transition( parser, logfile, previous_state);
+				}
 			return;
 		}
 		else
@@ -316,10 +323,26 @@ void fn_emulator_parser_process_params(EscPosParser * parser, EscPosCommand cmd,
 				fn_emulator_printer_write_byte_to_buffer(byte, state);
 
 				ParserState previous_state = parser->state;
-				parser->state = STATE_NORMAL;
+				fn_emulator_parser_reset(parser);
 				emulator_logger_log_parser_state_transition( parser, logfile, previous_state);
 			}
 		}
 		
 }
 	
+void fn_emulator_parser_reset(EscPosParser * parser){
+	parser->state = STATE_NORMAL;
+	parser->prefix = 0;
+	parser->command = 0;
+	memset(parser->params, 0, sizeof(parser->params));
+	parser->params_expected = 0;
+	parser->params_received = 0;
+	parser->has_payload = false;
+	if(parser->payload != NULL)
+	{
+		free(parser->payload);
+		parser->payload = NULL;
+	}
+	parser->payload_expected = 0;
+	parser->payload_received = 0;
+}

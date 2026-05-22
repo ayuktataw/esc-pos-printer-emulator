@@ -22,5 +22,5 @@ bool fn_emulator_parser_verify_command_exists(uint8_t prefix, uint8_t command);
 unsigned char * fn_emulator_parser_change_command_to_string(EscPosParser * parser);
 void fn_emulator_parser_process_params(EscPosParser * parser , EscPosCommand cmd, FILE * logfile, uint8_t byte, PrinterState *);
 void fn_emulator_parser_process_command(EscPosParser * parser,  FILE * logfile, uint8_t byte, ParserState previous_state, PrinterState *);
-
+void fn_emulator_parser_reset(EscPosParser * parser);
 #endif

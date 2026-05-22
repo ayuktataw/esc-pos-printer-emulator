@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 
 #define MAX_USER_CHARS 95
 #define FONT_A_WIDTH 12
@@ -60,6 +61,12 @@ typedef struct
 	size_t payload_received;
 }EscPosParser;
 
+typedef struct {
+	size_t size;
+	size_t current_pointer_position;
+	char * data;
+} PrintBuffer;
+
 typedef struct 
 {
 	bool bold;
@@ -72,14 +79,12 @@ typedef struct
 	PrintBuffer * print_buffer;
 }PrinterState;
 
-typedef struct {
-	size_t size;
-	size_t current_pointer_position;
-	char * data;
-} PrintBuffer;
+
 
 void fn_emulator_reinitialize_print_buffer_pointer(PrintBuffer * buffer);
 void fn_emulator_move_buffer_pointer(PrintBuffer * buffer, size_t offset);
 void fn_emulator_decrease_buffer_pointer_position(PrintBuffer * buffer, size_t offset);
 void fn_emulator_cleanup(FILE * logfile, int mas_fd, int slave_fd);
+void fn_emulator_set_date_string(char * datestring);
+
 #endif

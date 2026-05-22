@@ -5,5 +5,6 @@
 #include <stdint.h>
 
 void fn_test_underline(FILE *);
-
+void fn_test_underline_mode_2 (FILE * );
+void fn_test_run(FILE *);
 #endif

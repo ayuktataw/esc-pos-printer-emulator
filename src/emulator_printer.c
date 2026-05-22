@@ -1,12 +1,8 @@
 #include "emulator_printer.h"
 #include "emulator_parser.h"
 #include "emulator_logger.h"
-void fn_emulator_printer_print_byte(uint8_t  byte, FILE * log_file, PrinterState * state, EscPosParser * parser){
-    //This function is responsible for printing a byte to the console. 
-    //In a real implementation, this would be where you send the byte to the printer hardware. 
-    //For this emulator, we will just print the byte as a hexadecimal value. 
-    fprintf(log_file, "%02X ", byte);
-}
+
+
 void fn_emulator_printer_write_byte_to_buffer(uint8_t byte, PrinterState * state){
     //This function writes a byte to the print buffer. 
     //For this emulator, we will just append the byte to the buffer as an ascii character.
@@ -67,7 +63,9 @@ void fn_emulator_printer_select_command_handler(PrinterState * printer, EscPosPa
             case 0x26: // ESC & - Define user-defined characters
                 //we will handle this command in a separate function since it has a payload
                  break;
-                break;
+            case 0x2D:
+                fn_emulator_printer_handle_command_1B_2D(printer, parser, log_file);
+				break;
             default:
                 fprintf(log_file, "Unknown ESC command: %02X\n", parser->command);
                 break;
@@ -76,15 +74,12 @@ void fn_emulator_printer_select_command_handler(PrinterState * printer, EscPosPa
     return;
 }
 
-void fn_emulator_printer_handle_command_1B_0C(PrinterState * printer, EscPosParser * parser, FILE * log_file){
-    //This function handles the ESC FF command, which is used to print data in page mode
-    
-}
 void fn_emulator_printer_handle_command_1B_21(PrinterState * printer, EscPosParser * parser, FILE * log_file)
 {
     //This function handles the ESC ! n command, which is used to select print mode. 
     //The n parameter is a bit field that specifies the print mode settings. 
     //For this emulator, we will just set the printer state based on the bits in the n parameter. 
+    fn_emulator_logger_log_command_execution(parser, log_file);
     uint8_t n = parser->params[0];
     if((n & 0x08) != 0)
     {
@@ -121,6 +116,7 @@ void fn_emulator_printer_handle_command_1B_21(PrinterState * printer, EscPosPars
 }
 void fn_emulator_printer_handle_command_1B_26(PrinterState * printer, EscPosParser * parser, FILE * log_file, uint8_t byte)
 {
+    fn_emulator_logger_log_command_execution(parser, log_file);
     if(parser->has_payload)
     {
         //Calculating the number of bytes of payload we need to read based on the parameters received.
@@ -162,12 +158,13 @@ void fn_emulator_printer_handle_command_1B_26(PrinterState * printer, EscPosPars
             int char_index = code - 32;
             uint8_t x = *parser->payload++ ;
             if( x > (printer->font_config.currentFontIsA ? 12 : 9) )
+			{
                 x = printer->font_config.currentFontIsA ? 12 : 9; // we will only use the first 12 or 9 bits/dots for font A and B respectively, any extra bits will be ignored
-                UserChar * uc = printer->font_config.currentFontIsA ? &printer->font_config.userDefinedFontA[char_index] : &printer->font_config.userDefinedFontB[char_index];
+            }
+			   	UserChar * uc = printer->font_config.currentFontIsA ? &printer->font_config.userDefinedFontA[char_index] : &printer->font_config.userDefinedFontB[char_index];
                 uc->width = x;
                 uc->height = 24; // height is always 24 bits/dots for this
                 memset(uc->data, 0, sizeof(uc->data));
-                int bytesPerChar = parser->params[0] * x ;
                 for(int col = 0 ; col < x ; col++)
                 {
                     for(int row = 0 ; row < parser->params[0] ; row++)
@@ -183,5 +180,25 @@ void fn_emulator_printer_handle_command_1B_26(PrinterState * printer, EscPosPars
                     }
                 }
             }
+    }
+}
+
+void fn_emulator_printer_handle_command_1B_2D(PrinterState * printer, EscPosParser * parser, FILE * log_file){
+    fn_emulator_logger_log_command_execution(parser, log_file);
+    //handling the command to activate underline mode
+    if(printer->underline && (parser->params[0] != 0)) return;
+    if(parser->params[0] == 0){
+        //turn off underline mode
+        fn_emulator_printer_write_string_to_buffer("</span>", printer);
+        printer->underline = false;
+    } else {
+        //turn on underline mode 
+		printer->underline = printer->underline ? printer->underline : true;
+        if( parser->params[0] == 1){
+            fn_emulator_printer_write_string_to_buffer("<span style=\" text-decoration: underline; text-decoration-thickness: 1px;\">", printer);
+        }else{
+            //double the thickness of the line
+            fn_emulator_printer_write_string_to_buffer("<span style=\" text-decoration: underline; text-decoration-thickness: 3px;\">", printer);
+        }
     }
 }
