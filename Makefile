@@ -7,6 +7,7 @@ CC := gcc
 
 
 # Directories
+
 PROJECT_DIR := .
 LIB_DIR := $(PROJECT_DIR)/lib
 INC_DIR := $(PROJECT_DIR)/include
